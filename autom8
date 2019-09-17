@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+function welcome()
+{
+echo -e "\e[32;28m     /\         | |  | |     |__   __|      / __ \      |  \/  |      / _ \ 
+    /  \        | |  | |        | |        | |  | |     | \  / |     | (_) |
+   / /\ \       | |  | |        | |        | |  | |     | |\/| |      > _ < 
+  / ____ \      | |__| |        | |        | |__| |     | |  | |     | (_) |
+ /_/    \_\      \____/         |_|         \____/      |_|  |_|      \___/ 
+                                                                           \e[0m"
+echo -e "1. Display current sys info\n"
+echo -e	"2. Select and run automation scripts\n"
+echo -e "3. Schedule scripts with cron\n"
+echo -e	"4. Open port scanner\n"
+echo -e "5. About\n"
+}
+function about()
+{
+echo -e "autom8 version 1.0\nLicense: GNU GPLv3"
+echo -e "Find out more here: https://github.com/s7kala/autom8\n"
+}
+function sysfo()
+{
+echo -e "\e[31;43m***** HOSTNAME INFORMATION *****\e[0m"
+hostnamectl
+echo ""
+# -File system disk space usage:
+echo -e "\e[31;43m***** FILE SYSTEM DISK SPACE USAGE *****\e[0m"
+df -h
+echo ""
+# -Free and used memory in the system:
+echo -e "\e[31;43m ***** FREE AND USED MEMORY *****\e[0m"
+free
+echo ""
+# -System uptime and load:
+echo -e "\e[31;43m***** SYSTEM UPTIME AND LOAD *****\e[0m"
+uptime
+echo ""
+# -Logged-in users:
+echo -e "\e[31;43m***** CURRENTLY LOGGED-IN USERS *****\e[0m"
+who
+echo ""
+# -Top 5 processes as far as memory usage is concerned
+echo -e "\e[31;43m***** TOP 5 MEMORY-CONSUMING PROCESSES *****\e[0m"
+ps -eo %mem,%cpu,comm --sort=-%mem | head -n 6
+echo ""
+echo -e "\e[1;32mDone.\e[0m"
+}
+
+cd "$(find -name init.autom8 -type f -printf '%h\n' -quit)"
+valid=true
+while [ $valid ]
+	do
+		clear
+		welcome
+		read option
+		if [ $option -eq 1 ]; then
+			sysfo
+		elif [ $option -eq 2 ]; then
+			echo -e "Your automation scripts:\n"
+			ls scripts | egrep -n '.*'
+			echo -e "Choose which one to execute:\n"
+			read $numb
+			name=$(ls scripts | egrep "^$numb")
+			bash scripts/$name
+		elif [ $option -eq 3 ]; then
+			scripts/cron.sh
+		elif [ $option -eq 4 ]; then
+			echo -e "Enter the IPv4 address:\n"
+			read $ip
+			gcc portscn.c
+			./a.out $ip
+			rm a.out
+		elif [ $option -eq 5 ]; then
+			about
+		else
+			echo -e "You didn't enter a valid option -_-' (1-5)\n"
+		fi
+		echo -e "Enter 1 to continue\n"
+		read choice
+		if [ $choice -ne 1 ]; then
+			break
+		fi
+	done
+		
+	
+
+

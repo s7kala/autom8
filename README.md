@@ -2,6 +2,6 @@
 A simple automation tool for daily command-line tasks
 # Installation:
 Add autom8 to your PATH:  
-'''bash
+```bash
 PATH=$PATH:~/autom8/autom8
-'''
+```

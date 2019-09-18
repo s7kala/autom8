@@ -11,7 +11,8 @@ echo -e "1. Display current sys info\n"
 echo -e	"2. Select and run automation scripts\n"
 echo -e "3. Schedule scripts with cron\n"
 echo -e	"4. Open port scanner\n"
-echo -e "5. About\n"
+echo -e "5. New autom8 script\n"
+echo -e "6. About\n"
 }
 function about()
 {
@@ -59,8 +60,8 @@ while [ $valid ]
 			echo -e "Your automation scripts:\n"
 			ls scripts | egrep -n '.*'
 			echo -e "Choose which one to execute:\n"
-			read $numb
-			name=$(ls scripts | egrep "^$numb")
+			read numb
+			name=$(ls scripts | egrep -n '.*' | egrep "^${numb}" | cut -d ':' -f 2)
 			bash scripts/$name
 		elif [ $option -eq 3 ]; then
 			scripts/cron.sh
@@ -71,6 +72,10 @@ while [ $valid ]
 			./a.out $ip
 			rm a.out
 		elif [ $option -eq 5 ]; then
+			cd scripts
+			echo -e '#!/usr/bin/env bash\n' | vi -
+			cd ..
+		elif [ $option -eq 6 ]; then
 			about
 		else
 			echo -e "You didn't enter a valid option -_-' (1-5)\n"

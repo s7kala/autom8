@@ -13,12 +13,12 @@ int main(int argc, char *argv[])
     int sockfd, port;
     struct hostent *he;
 
-  /*  if (argc != 2)
+    if (argc != 2)
     {
         fprintf(stderr,"usage: client hostname\n");
         exit(1);
     }
-*/
+
     if ((he=gethostbyname(argv[1])) == NULL)   
     {
         perror("gethostbyname");
